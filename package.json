@@ -1,0 +1,19 @@
+{
+  "name": "todo-rest-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "NODE_ENV=prod node ./bin/www",
+    "scss": "node-sass --watch public/css -o public/css"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "morgan": "~1.9.1",
+    "node-sass": "^4.14.1",
+    "sqlite3": "^5.0.0"
+  }
+}
