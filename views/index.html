@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Todo APP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
-Write your code here
+<div class="header">
+    <h2>TODO APP</h2>
+    <input type="text" id="todo-input" placeholder="Add todo" autocomplete="off" />
+    <span id="add-btn">Add</span>
+</div>
+
+<ul id="tabs">
+    <li data-type="all" class="active" > All </li>
+    <li data-type="completed" > Completed </li>
+    <li data-type="pending" > Pending </li>
+</ul>
+
+<ul id="todo-list"></ul>
+
+<script type="module" src="js/todo.js"></script>
 </body>
 </html>
