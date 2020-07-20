@@ -25,7 +25,11 @@
 │       └── style.css
 ├── routes
 │   ├── index.js
+│   └── todos.js
 └── views
     ├── error.html
     ├── index.html
 ```
+
+<br/>
+Server side api collection - https://www.getpostman.com/collections/5f960b542dac9c40d18c

@@ -1,3 +1,5 @@
+const API_ROOT = 'http://localhost:3000/api/todos';
+
 const todoList = document.querySelector('#todo-list');
 const addButton = document.getElementById('add-btn');
 const tabs = document.querySelector('#tabs');
@@ -5,61 +7,81 @@ const tabs = document.querySelector('#tabs');
 // Data store and API integration
 const todoDataStore = (function () {
     const store = {
-        data: [
-            {
-                id: 1,
-                completed: false,
-                title: "get some vegetables",
-            },
-            {
-                id: 2,
-                completed: true,
-                title: "call john",
-            },
-            {
-                id: 3,
-                completed: false,
-                title: "pick up sarah",
-            },
-        ],
+        loading: '',
+        error: false,
+        errorMessage: '',
+        data: [],
         activeTab: "all",
     };
 
-    function fetchTodos() {
-        return store.data;
+    async function fetchTodos() {
+        const data = await fetch(API_ROOT);
+        const todoArr = await data.json();
+        store.data = todoArr;
+        return todoArr;
     }
 
     function getTodo(todoId = '') {
-        if (!todoId) {
+        if(!todoId) {
             return store.data;
         }
-        return store.data.filter(({id}) => +id === +todoId)[0];
+        return store.data.filter(({ id }) => +id === +todoId)[0];
     }
 
-    function addTodo(newTodo, callback = () => {
-    }) {
-        const newRow = {
-            id: store.data.length + 1,
-            completed: false,
-            ...newTodo
-        };
-        store.data = [...store.data, newRow];
-        callback(newRow);
-        console.log('ADD Success:', newTodo);
+    function addTodo(newTodo, callback = () => {}) {
+        fetch(`${API_ROOT}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(newTodo)
+        })
+            .then(() => {
+                const newRow = {
+                    id: store.data.length + 1,
+                    completed: false,
+                    ...newTodo
+                }
+                store.data = [...store.data, newRow];
+                callback(newRow);
+                console.log('ADD Success:', newTodo);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     }
 
-    function updateTodo(todo, callback = () => {
-    }) {
-        store.data = store.data.map((item) => todo.id === item.id ? todo : item);
-        callback();
-        console.log('UPDATE Success:', todo);
+    function updateTodo(todo, callback = () => {}) {
+        fetch(`${API_ROOT}/${todo.id}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(todo)
+        })
+            .then(() => {
+                store.data = store.data.map((item) => todo.id === item.id ? todo : item);
+                callback();
+                console.log('UPDATE Success:', todo);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                return false;
+            });
     }
 
-    function deleteTodo(todo, callback = () => {
-    }) {
-        store.data = store.data.filter((item) => todo.id !== item.id);
-        callback();
-        console.log('DELETE Success:', todo);
+    function deleteTodo(todo, callback = () => {}) {
+        fetch(`${API_ROOT}/${todo.id}/`, {
+            method: 'DELETE'
+        })
+            .then(() => {
+                store.data = store.data.filter((item) => todo.id !== item.id);
+                callback();
+                console.log('DELETE Success:', todo);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
     }
 
     function setActiveTab(tab = "all") {
@@ -78,14 +100,14 @@ const todoDataStore = (function () {
 })();
 
 // DOM Manipulation
-const actions = (function () {
+const actions = (function() {
     function clearInputField() {
         document.getElementById("todo-input").value = "";
     }
 
-    function addTodosFromStorage() {
-        todoList.innerHTML = "";
-        const todos = todoDataStore.fetchTodos();
+    async function addTodosFromStorage() {
+        todoList.innerHTML="";
+        const todos = await todoDataStore.fetchTodos();
         for (let todo of todos) {
             addNewRow(todo);
         }
@@ -100,7 +122,7 @@ const actions = (function () {
         element.appendChild(span);
     }
 
-    function addNewRow({title, completed, id}) {
+    function addNewRow({ title, completed, id }) {
         const li = document.createElement("li");
         const textSpan = document.createElement("span");
         textSpan.className = "todovalue";
@@ -117,16 +139,16 @@ const actions = (function () {
     }
 
     function selectTab(tab) {
-        tabs.childNodes.forEach(function (tab) {
-            tab.className = "";
-        });
+        tabs.childNodes.forEach(function(tab) {
+            tab.className="";
+        })
         tab.className = "active";
     }
 
     function showSelectedTabList(tab) {
         let tabList = todoDataStore.getTodo()
 
-        switch (tab) {
+        switch(tab) {
             case 'completed': {
                 tabList = tabList.filter((item) => !!item.completed);
                 break;
@@ -135,12 +157,11 @@ const actions = (function () {
                 tabList = tabList.filter((item) => !item.completed);
                 break;
             }
-            default: {
-            }
+            default: {}
         }
 
-        todoList.innerHTML = "";
-        tabList.forEach(function (todo) {
+        todoList.innerHTML="";
+        tabList.forEach(function(todo) {
             addNewRow(todo);
         });
     }
@@ -160,7 +181,7 @@ const events = (function () {
             if (ev.target.tagName === 'LI') {
                 const id = ev.target.getAttribute('data-id');
                 const data = todoDataStore.getTodo(id);
-                todoDataStore.updateTodo({...data, completed: data.completed ? 0 : 1}, function () {
+                todoDataStore.updateTodo({...data, completed: data.completed ? 0 : 1}, function() {
                     ev.target.classList.toggle('checked');
                 });
             }
@@ -168,7 +189,7 @@ const events = (function () {
     }
 
     function addClickListenerOnTabs() {
-        tabs.addEventListener('click', function (event) {
+        tabs.addEventListener('click', function(event) {
             if (event.target.tagName === 'LI') {
                 const tab = event.target;
                 const activeTab = tab.getAttribute('data-type');
@@ -188,7 +209,7 @@ const events = (function () {
             }
             todoDataStore.addTodo({
                 title: inputValue
-            }, function (row) {
+            }, function(row) {
                 actions.addNewRow(row);
             });
         }, false);
@@ -197,7 +218,7 @@ const events = (function () {
     function onCloseBtnClick() {
         const li = this.parentElement;
         const id = parseInt(li.getAttribute('data-id'));
-        todoDataStore.deleteTodo({id}, function () {
+        todoDataStore.deleteTodo({id}, function() {
             actions.addTodosFromStorage()
         });
     }
@@ -224,6 +245,6 @@ const init = function () {
     events.addListeners();
     actions.addTodosFromStorage();
     window.getTodoItems = todoDataStore.getTodo;
-};
+}
 
 init();
