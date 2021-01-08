@@ -22,13 +22,14 @@ const todoDataStore = (function () {
     }
 
     function getTodo(todoId = '') {
-        if(!todoId) {
+        if (!todoId) {
             return store.data;
         }
-        return store.data.filter(({ id }) => +id === +todoId)[0];
+        return store.data.filter(({id}) => +id === +todoId)[0];
     }
 
-    function addTodo(newTodo, callback = () => {}) {
+    function addTodo(newTodo, callback = () => {
+    }) {
         fetch(`${API_ROOT}/`, {
             method: 'POST',
             headers: {
@@ -51,7 +52,8 @@ const todoDataStore = (function () {
             });
     }
 
-    function updateTodo(todo, callback = () => {}) {
+    function updateTodo(todo, callback = () => {
+    }) {
         fetch(`${API_ROOT}/${todo.id}/`, {
             method: 'PUT',
             headers: {
@@ -70,7 +72,8 @@ const todoDataStore = (function () {
             });
     }
 
-    function deleteTodo(todo, callback = () => {}) {
+    function deleteTodo(todo, callback = () => {
+    }) {
         fetch(`${API_ROOT}/${todo.id}/`, {
             method: 'DELETE'
         })
@@ -100,13 +103,13 @@ const todoDataStore = (function () {
 })();
 
 // DOM Manipulation
-const actions = (function() {
+const actions = (function () {
     function clearInputField() {
         document.getElementById("todo-input").value = "";
     }
 
     async function addTodosFromStorage() {
-        todoList.innerHTML="";
+        todoList.innerHTML = "";
         const todos = await todoDataStore.fetchTodos();
         for (let todo of todos) {
             addNewRow(todo);
@@ -122,7 +125,7 @@ const actions = (function() {
         element.appendChild(span);
     }
 
-    function addNewRow({ title, completed, id }) {
+    function addNewRow({title, completed, id}) {
         const li = document.createElement("li");
         const textSpan = document.createElement("span");
         textSpan.className = "todovalue";
@@ -139,16 +142,16 @@ const actions = (function() {
     }
 
     function selectTab(tab) {
-        tabs.childNodes.forEach(function(tab) {
-            tab.className="";
-        })
+        tabs.childNodes.forEach(function (tab) {
+            tab.className = "";
+        });
         tab.className = "active";
     }
 
     function showSelectedTabList(tab) {
         let tabList = todoDataStore.getTodo()
 
-        switch(tab) {
+        switch (tab) {
             case 'completed': {
                 tabList = tabList.filter((item) => !!item.completed);
                 break;
@@ -157,11 +160,12 @@ const actions = (function() {
                 tabList = tabList.filter((item) => !item.completed);
                 break;
             }
-            default: {}
+            default: {
+            }
         }
 
-        todoList.innerHTML="";
-        tabList.forEach(function(todo) {
+        todoList.innerHTML = "";
+        tabList.forEach(function (todo) {
             addNewRow(todo);
         });
     }
@@ -181,7 +185,7 @@ const events = (function () {
             if (ev.target.tagName === 'LI') {
                 const id = ev.target.getAttribute('data-id');
                 const data = todoDataStore.getTodo(id);
-                todoDataStore.updateTodo({...data, completed: data.completed ? 0 : 1}, function() {
+                todoDataStore.updateTodo({...data, completed: data.completed ? 0 : 1}, function () {
                     ev.target.classList.toggle('checked');
                 });
             }
@@ -189,7 +193,7 @@ const events = (function () {
     }
 
     function addClickListenerOnTabs() {
-        tabs.addEventListener('click', function(event) {
+        tabs.addEventListener('click', function (event) {
             if (event.target.tagName === 'LI') {
                 const tab = event.target;
                 const activeTab = tab.getAttribute('data-type');
@@ -209,7 +213,7 @@ const events = (function () {
             }
             todoDataStore.addTodo({
                 title: inputValue
-            }, function(row) {
+            }, function (row) {
                 actions.addNewRow(row);
             });
         }, false);
@@ -218,7 +222,7 @@ const events = (function () {
     function onCloseBtnClick() {
         const li = this.parentElement;
         const id = parseInt(li.getAttribute('data-id'));
-        todoDataStore.deleteTodo({id}, function() {
+        todoDataStore.deleteTodo({id}, function () {
             actions.addTodosFromStorage()
         });
     }
@@ -245,6 +249,6 @@ const init = function () {
     events.addListeners();
     actions.addTodosFromStorage();
     window.getTodoItems = todoDataStore.getTodo;
-}
+};
 
 init();
