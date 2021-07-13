@@ -1,10 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
     <title>Todo APP</title>
 </head>
 
 <body>
-Write your code here
+    <div class="title">
+        <div class="title-text">
+            TODO APP
+        </div>
+        <div class="add-form">
+            <form>
+                    <input type="text" class="form-input">
+                
+                    <input type="submit" class="form-submit" value="Add">
+               
+            </form>
+        </div>
+    </div>
+    <div class="content">
+        <div class="tabs">
+            
+            <div class="tabcontent active">All</div>
+            <div class="tabcontent">Completed</div>
+            <div class="tabcontent">Pending</div>
+            
+        </div>
+        <div class="todo-list">
+            <form>
+                <ul class="tabs">
+                    <li class="todo-item"><input type="checkbox"> buy the milk<input type="button" value="x" class="close-todo"></li>
+                    <li class="todo-item completed"><input type="checkbox"> rent a car<input type="button" value="x" class="close-todo"></li>
+                    <li class="todo-item"><input type="checkbox"> feed the cat<input type="button" value="x" class="close-todo"></li>
+                </ul>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

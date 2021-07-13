@@ -1,1 +1,93 @@
-/*write css here*/
+div.title {
+  background-color: rgb(73, 73, 255);
+  height: 60px;
+  width: 100%;
+  padding: 10px 10px 10px 10px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+div.title-text {
+  color: white;
+  font-size: 18px;
+  font-size: 25px;
+}
+
+div.add-form {
+  width: 100%;
+  height: 30px;
+}
+
+div.content {
+  flex-direction: column;
+  display: flex;
+}
+
+input.form-input {
+  width: 70%;
+  height: 30px;
+  font-size: medium;
+}
+
+input.form-submit {
+  width: 29%;
+  height: 30px;
+}
+
+ul.tabs {
+  list-style-type: none;
+  font-size: 20px;
+  padding-left: 50px;
+}
+
+li.todo-item {
+  height: 40px;
+  align-items: center;
+  display: flex;
+}
+
+li.todo-item:hover {
+  background-color: #f1f1f1;
+}
+
+li.completed {
+  text-decoration: line-through;
+}
+
+div.tabs {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 50px;
+  font-size: 25px;
+  margin: 10px 10px 10px 10px;
+  align-items: stretch;
+}
+
+div.tabcontent {
+  padding: 10px 10px 10px 10px;
+  height: 100%;
+  display: flex;
+  flex: 1;
+  cursor: pointer;
+}
+
+div.active {
+  border-bottom-style: solid;
+  border-bottom-color: rgb(73, 73, 255);
+  cursor: default;
+}
+
+input.close-todo {
+  display: flex;
+  margin-left: auto;
+  border: 0 none;
+  background-color: white;
+}
+
+input[type="button"],
+input[type="submit"] {
+  cursor: pointer;
+}
