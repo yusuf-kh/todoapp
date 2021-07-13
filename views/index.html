@@ -12,9 +12,9 @@
         </div>
         <div class="add-form">
             <form>
-                    <input type="text" class="form-input">
+                    <input type="text" class="form-input" id="todo-input">
                 
-                    <input type="submit" class="form-submit" value="Add">
+                    <input type="submit" class="form-submit" value="Add" onclick="addTodoItem(event)">
                
             </form>
         </div>
@@ -22,14 +22,14 @@
     <div class="content">
         <div class="tabs">
             
-            <div class="tabcontent active">All</div>
-            <div class="tabcontent">Completed</div>
-            <div class="tabcontent">Pending</div>
+            <div class="tabcontent active" id="all">All</div>
+            <div class="tabcontent" id="completed">Completed</div>
+            <div class="tabcontent" id="pending">Pending</div>
             
         </div>
         <div class="todo-list">
             <form>
-                <ul class="tabs">
+                <ul class="tabs" id="todo-list">
                     <li class="todo-item"><input type="checkbox"> buy the milk<input type="button" value="x" class="close-todo"></li>
                     <li class="todo-item completed"><input type="checkbox"> rent a car<input type="button" value="x" class="close-todo"></li>
                     <li class="todo-item"><input type="checkbox"> feed the cat<input type="button" value="x" class="close-todo"></li>
@@ -37,5 +37,6 @@
             </form>
         </div>
     </div>
+    <script src="./js/todo.js"></script>
 </body>
 </html>
